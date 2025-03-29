@@ -4,9 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>com.github.IlyasValiulov</groupId>
     <artifactId>sdet_intership</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <url>https://github.com/IlyasValiulov/SDET_intership</url>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -14,4 +15,17 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.11.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>4.30.0</version>
+        </dependency>
+    </dependencies>
 </project>
