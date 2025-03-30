@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.*;
@@ -13,6 +14,7 @@ public class BaseTest {
     XyzPage xyz_page;
 
     @BeforeMethod
+    @Step("Инициализация драйвера и открытие страницы")
     public void init() {
         driver = new FirefoxDriver();
         driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
@@ -20,6 +22,7 @@ public class BaseTest {
     }
 
     @AfterMethod
+    @Step("Закрытие драйвера и завершение теста")
     public void teardown() {
         driver.quit();
     }

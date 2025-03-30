@@ -1,16 +1,23 @@
 package tests;
 
 import extensions.DataGeneration;
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Step;
 import org.openqa.selenium.Alert;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 import pages.AddCustomerPage;
 
+import static io.qameta.allure.Allure.step;
+
+@Feature("Тесты страницы добавления пользователя")
 public class AddCustomerTests extends BaseTest {
     AddCustomerPage add_page;
 
     @BeforeMethod
+    @Step("Загрузка страницы добавления пользователя")
     public void setup() {
         add_page =  xyz_page.clickAddCustomerButton();
     }
@@ -20,10 +27,14 @@ public class AddCustomerTests extends BaseTest {
         var lastName = "Valiulov";
         var postCode = DataGeneration.generatePostCode();
         var firstName = DataGeneration.generateName(postCode);
-        add_page.addCustomer(firstName, lastName, postCode);
+        step("Добавление пользователя c данными %s %s %s".formatted(firstName, lastName, postCode), () -> {
+            add_page.addCustomer(firstName, lastName, postCode);
+        });
 
         Alert alert = driver.switchTo().alert();
-        Assert.assertTrue(alert.getText().contains("Customer added successfully with customer id :"));
+        step("Проверка соответствия выражения", () -> {
+            Assert.assertTrue(alert.getText().contains("Customer added successfully with customer id :"));
+        });
     }
 
     @Test
@@ -32,12 +43,22 @@ public class AddCustomerTests extends BaseTest {
         var postCode = DataGeneration.generatePostCode();
         var firstName = DataGeneration.generateName(postCode);
 
-        add_page.addCustomer(firstName, lastName, postCode);
-        driver.switchTo().alert().dismiss();
-        add_page.addCustomer(firstName, lastName, postCode);
+        step("Добавление пользователя c данными %s %s %s".formatted(firstName, lastName, postCode), () -> {
+            add_page.addCustomer(firstName, lastName, postCode);
+        });
 
-        Alert alert = driver.switchTo().alert();
-        Assert.assertTrue(alert.getText().contains("Please check the details. Customer may be duplicate."));
+        step("Пропуск уведомления", () -> {
+            driver.switchTo().alert().dismiss();
+        });
+
+        step("Добавление пользователя c дублирующими данными %s %s %s".formatted(firstName, lastName, postCode), () -> {
+            add_page.addCustomer(firstName, lastName, postCode);
+        });
+
+        step("Получение уведомление о дублирующих данных", () -> {
+            Alert alert = driver.switchTo().alert();
+            Assert.assertTrue(alert.getText().contains("Please check the details. Customer may be duplicate."));
+        });
     }
 
     @Test
@@ -48,12 +69,20 @@ public class AddCustomerTests extends BaseTest {
         var postCode = DataGeneration.generatePostCode();
         var firstName = DataGeneration.generateName(postCode);
 
-        add_page.addCustomer("", lastName, postCode);
+        step("Создание пользователя с пустым именем", () -> {
+            add_page.addCustomer("", lastName, postCode);
+        });
         softAssert.assertTrue(add_page.isErrorMessageDisplayed(), "Field firstname is empty");
-        add_page.addCustomer(firstName, "", postCode);
+        step("Создание пользователя с пустой фамилией", () -> {
+            add_page.addCustomer(firstName, "", postCode);
+        });
         softAssert.assertTrue(add_page.isErrorMessageDisplayed(), "Field lastname is empty");
-        add_page.addCustomer(firstName, lastName, "");
+        step("Создание пользователя с пустым посткодом", () -> {
+            add_page.addCustomer(firstName, lastName, "");
+        });
         softAssert.assertTrue(add_page.isErrorMessageDisplayed(), "Field postcode is empty");
-        softAssert.assertAll();
+        step("Проверка о невозможности создать пользователя с отсутствующем полем", () -> {
+            softAssert.assertAll();
+        });
     }
 }
