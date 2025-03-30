@@ -1,5 +1,6 @@
 package tests;
 
+import extensions.DataGeneration;
 import org.openqa.selenium.Alert;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -17,8 +18,8 @@ public class AddCustomerTests extends BaseTest {
     @Test
     public void AddCustomer() {;
         var lastName = "Valiulov";
-        var postCode = AddCustomerPage.generatePostCode();
-        var firstName = AddCustomerPage.generateName(postCode);
+        var postCode = DataGeneration.generatePostCode();
+        var firstName = DataGeneration.generateName(postCode);
         add_page.addCustomer(firstName, lastName, postCode);
 
         Alert alert = driver.switchTo().alert();
@@ -28,8 +29,8 @@ public class AddCustomerTests extends BaseTest {
     @Test
     public void AddDublicateCustomer() {
         var lastName = "Valiulov";
-        var postCode = AddCustomerPage.generatePostCode();
-        var firstName = AddCustomerPage.generateName(postCode);
+        var postCode = DataGeneration.generatePostCode();
+        var firstName = DataGeneration.generateName(postCode);
 
         add_page.addCustomer(firstName, lastName, postCode);
         driver.switchTo().alert().dismiss();
@@ -44,8 +45,8 @@ public class AddCustomerTests extends BaseTest {
         SoftAssert softAssert = new SoftAssert();
 
         var lastName = "Valiulov";
-        var postCode = AddCustomerPage.generatePostCode();
-        var firstName = AddCustomerPage.generateName(postCode);
+        var postCode = DataGeneration.generatePostCode();
+        var firstName = DataGeneration.generateName(postCode);
 
         add_page.addCustomer("", lastName, postCode);
         softAssert.assertTrue(add_page.isErrorMessageDisplayed(), "Field firstname is empty");

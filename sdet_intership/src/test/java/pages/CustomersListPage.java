@@ -4,6 +4,7 @@ import extensions.SortType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
@@ -12,13 +13,13 @@ import java.util.concurrent.TimeUnit;
 
 public class CustomersListPage extends BasePage {
     @FindBy(xpath = "//a[contains(.,'First Name')]")
-    WebElement fistNameLink;
+    WebElement fistName;
 
     @FindBy(css = "tbody tr")
     List<WebElement> rows;
 
     @FindBy(xpath = "//tbody/tr/td[1]")
-    List<WebElement> firstName;
+    List<WebElement> firstNameList;
 
     public CustomersListPage(WebDriver driver) {
         super(driver);
@@ -28,10 +29,12 @@ public class CustomersListPage extends BasePage {
         driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
         switch (type) {
             case Ask: {
-                fistNameLink.click();
+                Actions actions = new Actions(driver);
+                actions.doubleClick(fistName).perform();
+                break;
             }
             case Desk: {
-                fistNameLink.click();
+                fistName.click();
                 break;
             }
         }
@@ -51,7 +54,7 @@ public class CustomersListPage extends BasePage {
 
     public List<String> getCustomersFirstName() {
         List<String> names = new ArrayList<>();
-        for (WebElement cell : firstName) {
+        for (WebElement cell : firstNameList) {
             names.add(cell.getText());
         }
         return names;
