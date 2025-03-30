@@ -1,7 +1,6 @@
 package tests;
 
 import extensions.DataGeneration;
-import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Step;
 import org.openqa.selenium.Alert;
@@ -19,7 +18,7 @@ public class AddCustomerTests extends BaseTest {
     @BeforeMethod
     @Step("Загрузка страницы добавления пользователя")
     public void setup() {
-        add_page =  xyz_page.clickAddCustomerButton();
+        add_page = xyz_page.clickAddCustomerButton();
     }
 
     @Test
@@ -31,7 +30,7 @@ public class AddCustomerTests extends BaseTest {
             add_page.addCustomer(firstName, lastName, postCode);
         });
 
-        Alert alert = driver.switchTo().alert();
+        Alert alert = getDriver().switchTo().alert();
         step("Проверка соответствия выражения", () -> {
             Assert.assertTrue(alert.getText().contains("Customer added successfully with customer id :"));
         });
@@ -42,6 +41,7 @@ public class AddCustomerTests extends BaseTest {
         var lastName = "Valiulov";
         var postCode = DataGeneration.generatePostCode();
         var firstName = DataGeneration.generateName(postCode);
+        var driver = getDriver();
 
         step("Добавление пользователя c данными %s %s %s".formatted(firstName, lastName, postCode), () -> {
             add_page.addCustomer(firstName, lastName, postCode);
