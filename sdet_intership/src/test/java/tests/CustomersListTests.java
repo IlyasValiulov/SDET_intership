@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static io.qameta.allure.Allure.step;
+
 public class CustomersListTests extends BaseTest {
     CustomersListPage customer_page;
     @BeforeMethod
@@ -23,7 +25,9 @@ public class CustomersListTests extends BaseTest {
         List<String> firstNames = customer_page.getCustomersFirstName();
         List<String> expectedFirstNames = new ArrayList<>(firstNames);
         Collections.sort(expectedFirstNames);
-        Assert.assertEquals(firstNames, expectedFirstNames, "First names are not sorted correctly");
+        step("Проверка соответсвия сортировки по возрастанию", () -> {
+            Assert.assertEquals(firstNames, expectedFirstNames, "First names are not sorted correctly");
+        });
     }
 
     @Test
@@ -32,14 +36,20 @@ public class CustomersListTests extends BaseTest {
         List<String> firstNames = customer_page.getCustomersFirstName();
         List<String> expectedFirstNames = new ArrayList<>(firstNames);
         Collections.sort(expectedFirstNames, Collections.reverseOrder());
-        Assert.assertEquals(firstNames, expectedFirstNames, "First names are not sorted correctly");
+        step("Проверка соотвествия сортировки по убыванию", () -> {
+            Assert.assertEquals(firstNames, expectedFirstNames, "First names are not sorted correctly");
+        });
     }
 
     @Test
     public void deleteAverageName() {
         var name = customer_page.findAverageName();
-        Assert.assertNotNull(name);
+        step("Проверка на существования имени", () -> {
+            Assert.assertNotNull(name);
+        });
         customer_page.deleteAverageCustomer(name);
-        Assert.assertFalse(customer_page.getCustomersFirstName().contains(name));
+        step("Проверка удаления имени на страницы", () -> {
+            Assert.assertFalse(customer_page.getCustomersFirstName().contains(name));
+        });
     }
 }

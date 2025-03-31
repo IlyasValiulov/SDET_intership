@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -25,6 +26,7 @@ public class AddCustomerPage extends BasePage {
 
     public AddCustomerPage(WebDriver driver) { super(driver); }
 
+    @Step("Добавление пользователся со значениями {first_name} {last_name} {post_code}")
     public AddCustomerPage addCustomer(String first_name, String last_name, String post_code) {
         driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
         clearAllFields();
@@ -35,6 +37,7 @@ public class AddCustomerPage extends BasePage {
         return new AddCustomerPage(driver);
     }
 
+    @Step("Вывод сообщения об ошибке")
     public boolean isErrorMessageDisplayed() {
         return errorMessage.isDisplayed();
     }

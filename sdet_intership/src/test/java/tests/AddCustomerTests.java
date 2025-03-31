@@ -26,10 +26,7 @@ public class AddCustomerTests extends BaseTest {
         var lastName = "Valiulov";
         var postCode = DataGeneration.generatePostCode();
         var firstName = DataGeneration.generateName(postCode);
-        step("Добавление пользователя c данными %s %s %s".formatted(firstName, lastName, postCode), () -> {
-            add_page.addCustomer(firstName, lastName, postCode);
-        });
-
+        add_page.addCustomer(firstName, lastName, postCode);
         Alert alert = getDriver().switchTo().alert();
         step("Проверка соответствия выражения", () -> {
             Assert.assertTrue(alert.getText().contains("Customer added successfully with customer id :"));
@@ -43,17 +40,13 @@ public class AddCustomerTests extends BaseTest {
         var firstName = DataGeneration.generateName(postCode);
         var driver = getDriver();
 
-        step("Добавление пользователя c данными %s %s %s".formatted(firstName, lastName, postCode), () -> {
-            add_page.addCustomer(firstName, lastName, postCode);
-        });
+        add_page.addCustomer(firstName, lastName, postCode);
 
         step("Пропуск уведомления", () -> {
             driver.switchTo().alert().dismiss();
         });
 
-        step("Добавление пользователя c дублирующими данными %s %s %s".formatted(firstName, lastName, postCode), () -> {
-            add_page.addCustomer(firstName, lastName, postCode);
-        });
+        add_page.addCustomer(firstName, lastName, postCode);
 
         step("Получение уведомление о дублирующих данных", () -> {
             Alert alert = driver.switchTo().alert();
@@ -69,17 +62,11 @@ public class AddCustomerTests extends BaseTest {
         var postCode = DataGeneration.generatePostCode();
         var firstName = DataGeneration.generateName(postCode);
 
-        step("Создание пользователя с пустым именем", () -> {
-            add_page.addCustomer("", lastName, postCode);
-        });
+        add_page.addCustomer("", lastName, postCode);
         softAssert.assertTrue(add_page.isErrorMessageDisplayed(), "Field firstname is empty");
-        step("Создание пользователя с пустой фамилией", () -> {
-            add_page.addCustomer(firstName, "", postCode);
-        });
+        add_page.addCustomer(firstName, "", postCode);
         softAssert.assertTrue(add_page.isErrorMessageDisplayed(), "Field lastname is empty");
-        step("Создание пользователя с пустым посткодом", () -> {
-            add_page.addCustomer(firstName, lastName, "");
-        });
+        add_page.addCustomer(firstName, lastName, "");
         softAssert.assertTrue(add_page.isErrorMessageDisplayed(), "Field postcode is empty");
         step("Проверка о невозможности создать пользователя с отсутствующем полем", () -> {
             softAssert.assertAll();

@@ -1,6 +1,7 @@
 package pages;
 
 import extensions.SortType;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,6 +9,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -25,26 +27,29 @@ public class CustomersListPage extends BasePage {
         super(driver);
     }
 
+    @Step("Сортировка клиентов")
     public CustomersListPage sortCustomers(SortType type) {
         driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+        var names = getCustomersFirstName();
+        List<String> sortedList = new ArrayList<>(names);
         switch (type) {
             case Ask: {
-                Actions actions = new Actions(driver);
-                actions.doubleClick(fistName).perform();
+                Collections.sort(sortedList);
                 break;
             }
             case Desk: {
-                fistName.click();
+                Collections.sort(sortedList, Collections.reverseOrder());
                 break;
             }
+        }
+        while (!names.equals(sortedList)) {
+            fistName.click();
+            names = getCustomersFirstName();
         }
         return new CustomersListPage(driver);
     }
 
-    public List<WebElement> getRows() {
-        return rows;
-    }
-
+    @Step("Удаление клиентов с именем близким к среднему значению всех имен")
     public void deleteAverageCustomer(String name) {
         rows.stream()
                 .filter(row -> row.findElements(By.tagName("td")).get(0).getText().equals(name))
@@ -52,6 +57,7 @@ public class CustomersListPage extends BasePage {
                 .ifPresent(row -> row.findElement(By.tagName("button")).click());
     }
 
+    @Step("Получение имен клиентов")
     public List<String> getCustomersFirstName() {
         List<String> names = new ArrayList<>();
         for (WebElement cell : firstNameList) {
@@ -60,6 +66,7 @@ public class CustomersListPage extends BasePage {
         return names;
     }
 
+    @Step("Поиск имени")
     public String findAverageName() {
         var names = getCustomersFirstName();
         double avg = names.stream()

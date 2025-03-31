@@ -1,8 +1,11 @@
 package extensions;
 
+import io.qameta.allure.Step;
+
 import java.util.Random;
 
 public class DataGeneration {
+    @Step("Генерация посткода")
     public static String generatePostCode() {
         StringBuilder code = new StringBuilder();
         int len = 10;
@@ -13,6 +16,7 @@ public class DataGeneration {
         return code.toString();
     }
 
+    @Step("Генерация имени на основе посткода: {postCode}")
     public static String generateName(String postCode) {
         StringBuilder name = new StringBuilder();
         for (int i = 0; i < postCode.length(); i += 2) {
