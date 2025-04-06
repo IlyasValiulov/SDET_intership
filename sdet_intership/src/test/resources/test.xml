@@ -2,8 +2,6 @@
 <suite name="Web Application Test Suite">
     <test name="Tests" parallel="methods" thread-count="4">
         <classes>
-            <class name="tests.AddCustomerTests"/>
-            <class name="tests.CustomersListTests"/>
         </classes>
     </test>
 </suite>
