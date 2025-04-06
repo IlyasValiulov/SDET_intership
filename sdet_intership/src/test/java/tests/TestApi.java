@@ -2,6 +2,8 @@ package tests;
 
 import com.google.gson.Gson;
 import extensions.DbWork;
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
@@ -25,6 +27,7 @@ public class TestApi {
     protected RequestSpecification requestSpec;
 
     @BeforeClass
+    @Step("Настройка базовых параметров запроса")
     public void setup() {
         gson = new Gson();
         RestAssured.defaultParser = Parser.JSON;
@@ -34,6 +37,7 @@ public class TestApi {
     }
 
     @Test
+    @Description("Проверка создания новой сущности через post запрос")
     public void Post_CreateEntity_Test() {
         Entity entity = Entity.builder().build();
 
@@ -48,6 +52,7 @@ public class TestApi {
     }
 
     @Test
+    @Description("Проверка получения списка сущностей")
     public void Get_GetAllEntities_Test() {
         String searchTitle = "Заголовок сущности";
         boolean verifiedStatus = true;
@@ -77,6 +82,7 @@ public class TestApi {
     }
 
     @Test
+    @Description("Проверка получения сущности по ID")
     public void Get_GetEntityById_Test() {
         int id = 1;
 
@@ -103,6 +109,7 @@ public class TestApi {
     }
 
     @Test
+    @Description("Проверка обновления сущности через patch запрос")
     public void Patch_PatchEntityById_Test() {
         int id = 2;
 
@@ -127,6 +134,7 @@ public class TestApi {
     }
 
     @Test
+    @Description("Проверка удаления сущности по id")
     public void Delete_DeleteEntityById_Test() {
         int id = 18;
         given()
@@ -137,6 +145,7 @@ public class TestApi {
     }
 
     @AfterMethod
+    @Step("Очистка тестовых данных")
     public void tearDown() {
         if (userId != null)
             DbWork.deleleEntityById(userId);
