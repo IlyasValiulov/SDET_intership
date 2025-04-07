@@ -17,6 +17,7 @@ import pojo.EntityResponse;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 import static org.testng.Assert.*;
@@ -25,6 +26,7 @@ public class TestApi {
     Integer userId;
     Gson gson;
     protected RequestSpecification requestSpec;
+    final String BASE_URL = "http://localhost:8080/";
 
     @BeforeClass
     @Step("Настройка базовых параметров запроса")
@@ -33,13 +35,15 @@ public class TestApi {
         RestAssured.defaultParser = Parser.JSON;
         requestSpec = given()
                 .contentType(ContentType.JSON)
-                .baseUri("http://localhost:8080/");
+                .baseUri(BASE_URL);
     }
 
     @Test
     @Description("Проверка создания новой сущности через post запрос")
     public void Post_CreateEntity_Test() {
-        Entity entity = Entity.builder().build();
+        Integer id = 15;
+        Addition addition = Addition.builder().additional_info("additional_info").additional_number(123).build();
+        Entity entity = Entity.builder().id(id).addition(addition).important_numbers(Arrays.asList(42, 87, 15)).title("Заголовок сущности").verified(true).build();
 
         userId = given()
                 .spec(requestSpec)
@@ -49,6 +53,8 @@ public class TestApi {
             .then()
                 .statusCode(200)
                 .extract().as(Integer.class);
+
+        assertEquals(id, userId);
     }
 
     @Test
@@ -136,7 +142,7 @@ public class TestApi {
     @Test
     @Description("Проверка удаления сущности по id")
     public void Delete_DeleteEntityById_Test() {
-        int id = 18;
+        int id = DbWork.createEntity();
         given()
                 .when()
                 .delete("api/delete/" + id)

@@ -1,28 +1,40 @@
 package pojo;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class Entity {
-    @Builder.Default
-    private Addition addition = new Addition("Дополнительные сведения", 123, 1);
+    private Addition addition;
 
     private int id;
 
-    @Builder.Default
-    private List<Integer> important_numbers = new ArrayList<>(Arrays.asList(42, 87, 15));
+    private List<Integer> important_numbers;
 
-    @Builder.Default
-    private String title = "Заголовок сущности";
+    private String title;
 
-    @Builder.Default
-    private boolean verified = true;
+    private boolean verified;
+
+    @JsonCreator
+    public Entity(
+            @JsonProperty("addition") Addition addition,
+            @JsonProperty("id") int id,
+            @JsonProperty("important_numbers") List<Integer> important_numbers,
+            @JsonProperty("title") String title,
+            @JsonProperty("verified") boolean verified) {
+        this.addition = addition;
+        this.id = id;
+        this.important_numbers = important_numbers;
+        this.title = title;
+        this.verified = verified;
+    }
+
+    public Entity() {}
 }
